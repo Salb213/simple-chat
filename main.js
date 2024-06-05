@@ -25,18 +25,25 @@ const functions = getFunctions(app);
 
 // Google Login
 document.getElementById('login-google').addEventListener('click', () => {
+  console.log('Login button clicked');
   const provider = new GoogleAuthProvider();
   signInWithPopup(auth, provider)
     .then(result => {
+      console.log('User signed in:', result.user.email);
       sendEmailNotification(result.user.email);
     })
-    .catch(console.error);
+    .catch(error => {
+      console.error('Error signing in:', error);
+    });
 });
 
 // Send email notification to the site owner
 function sendEmailNotification(email) {
+  console.log('Sending email notification for:', email);
   const sendEmail = httpsCallable(functions, 'sendEmail');
   sendEmail({ email: email })
     .then(result => console.log('Email sent:', result))
-    .catch(console.error);
+    .catch(error => {
+      console.error('Error sending email:', error);
+    });
 }
